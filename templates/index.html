@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document Classification</title>
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Arrows:wght@400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Arrows:wght@400..700&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1>Upload Document for Classification</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" id="file" required>
+        <label for="file"></label>
+        <input type="submit" value="Upload">
+    </form>
+    
+    {% if result %}
+        <div id="res"><h2>Prediction:</h2>
+        <p class="show-result"> The file is of type <br>{{ result }}</p> </div> <!-- This will trigger the fade-in effect -->
+    {% endif %}
+</body>
+</html>

@@ -72,10 +72,10 @@ def index():
                 # Map the prediction index to the category
                 predicted_category = categories[prediction_index]  # Assuming the model outputs an index
                 
-                return render_template('main.html', result=predicted_category)
+                return render_template('index.html', result=predicted_category)
             except Exception as e:
-                return render_template('main.html', result=f"Error: {str(e)}")
-    return render_template('main.html', result=None)
+                return render_template('index.html', result=f"Error: {str(e)}")
+    return render_template('index.html', result=None)
 
 if __name__ == '__main__':
     app.run(debug=True)
