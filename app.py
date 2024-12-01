@@ -1,55 +1,48 @@
-from flask import Flask, request, jsonify
-import pandas as pd
-from data_loader import DataLoader
-from preprocessing import TextPreprocessor
-from vectorization import Vectorizer
-from model_manager import load_model
+from flask import Flask, request, render_template
+import dill
+import os
 
+# Load the model and vectorizer
+with open("model.dill", "rb") as model_file:
+    model = dill.load(model_file)
+
+with open("vectorizer.dill", "rb") as vectorizer_file:
+    vectorizer = dill.load(vectorizer_file)
+
+# Flask app initialization
 app = Flask(__name__)
 
-# Load model and vectorizer
-model_filename = 'model.pkl'
-model = load_model(model_filename)
-vectorizer = Vectorizer()
+# Categories for reference
+categories = [
+    "Consolidated statement of cash flows",
+    "Note to financial statements",
+    "Statement of changes in equity",
+    "Statement of operations",
+    "Statements of Financial Position"
+]
 
-# Endpoint for predicting categories of new documents
-@app.route('/asdf', methods=['POST'])
-def predict():
-    # Check if JSON data is sent
-    if not request.is_json:
-        return jsonify({"error": "Invalid input format. JSON expected."}), 400
+@app.route("/", methods=["GET", "POST"])
+def index():
+    prediction = None
+    if request.method == "POST":
+        # Get the uploaded file
+        file = request.files["file"]
+        if file:
+            try:
+                # Try reading as UTF-8
+                content = file.read().decode("utf-8")
+            except UnicodeDecodeError:
+                # If UTF-8 fails, fallback to ISO-8859-1 (Latin-1)
+                file.seek(0)  # Reset file pointer
+                content = file.read().decode("iso-8859-1")
 
-    # Parse the JSON data
-    data = request.get_json()
-    documents = data.get('documents', None)
+            # Transform the content using the vectorizer
+            transformed_content = vectorizer.transform([content])
+            # Predict the category
+            pred = model.predict(transformed_content)[0]
+            prediction = categories[pred]
 
-    # Check if 'documents' key exists in the JSON
-    if documents is None or not isinstance(documents, list):
-        return jsonify({"error": "Invalid input. A list of documents is expected under the key 'documents'."}), 400
-
-    # Preprocess the documents
-    preprocessor = TextPreprocessor()
-    processed_documents = preprocessor.preprocess_documents(documents)
-    text_data = [' '.join(tokens) for filename, tokens in processed_documents]  # Reconstruct text from tokens
-
-    # Vectorize the text data
-    X = vectorizer.transform(text_data)
-
-    # Predict categories
-    predictions = model.model.predict(X)
-
-    # Prepare the output as JSON
-    response = [
-        {"filename": processed_documents[i][0], "category": predictions[i]}
-        for i in range(len(predictions))
-    ]
-
-    return jsonify(response)
-
-# Health check endpoint
-@app.route('/health', methods=['GET'])
-def health_check():
-    return jsonify({"status": "API is running"}), 200
+    return render_template("index.html", prediction=prediction)
 
 if __name__ == "__main__":
     app.run(debug=True)
