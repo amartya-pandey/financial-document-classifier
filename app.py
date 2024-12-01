@@ -1,48 +1,67 @@
-from flask import Flask, request, render_template
-import dill
 import os
+import dill
+import pandas as pd
+from flask import Flask, request, render_template
+import chardet  # To detect file encoding
+from io import BytesIO
+from PyPDF2 import PdfReader  # For PDF files
+from docx import Document  # For DOCX files
 
-# Load the model and vectorizer
-with open("model.dill", "rb") as model_file:
-    model = dill.load(model_file)
-
-with open("vectorizer.dill", "rb") as vectorizer_file:
-    vectorizer = dill.load(vectorizer_file)
-
-# Flask app initialization
 app = Flask(__name__)
 
-# Categories for reference
-categories = [
-    "Consolidated statement of cash flows",
-    "Note to financial statements",
-    "Statement of changes in equity",
-    "Statement of operations",
-    "Statements of Financial Position"
-]
+# Load the model and vectorizer
+with open('model.dill', 'rb') as model_file:
+    model = dill.load(model_file)
 
-@app.route("/", methods=["GET", "POST"])
+with open('vectorizer.dill', 'rb') as vectorizer_file:
+    vectorizer = dill.load(vectorizer_file)
+
+def read_file_content(file):
+    # Read the raw data from the file
+    raw_data = file.read()
+    
+    # Detect the encoding
+    result = chardet.detect(raw_data)
+    encoding = result['encoding'] if result['encoding'] is not None else 'utf-8'  # Default to utf-8
+
+    # Reset file pointer to the beginning
+    file.seek(0)
+
+    # Try to read as text
+    try:
+        content = raw_data.decode(encoding)
+    except UnicodeDecodeError:
+        # If decoding fails, try to handle specific formats
+        if file.filename.endswith('.pdf'):
+            reader = PdfReader(BytesIO(raw_data))
+            content = ""
+            for page in reader.pages:
+                content += page.extract_text() or ""
+        elif file.filename.endswith('.docx'):
+            doc = Document(BytesIO(raw_data))
+            content = "\n".join([para.text for para in doc.paragraphs])
+        else:
+            raise ValueError("Unsupported file format or encoding.")
+    
+    return content
+
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    prediction = None
-    if request.method == "POST":
-        # Get the uploaded file
-        file = request.files["file"]
+    if request.method == 'POST':
+        # Handle file upload
+        file = request.files['file']
         if file:
             try:
-                # Try reading as UTF-8
-                content = file.read().decode("utf-8")
-            except UnicodeDecodeError:
-                # If UTF-8 fails, fallback to ISO-8859-1 (Latin-1)
-                file.seek(0)  # Reset file pointer
-                content = file.read().decode("iso-8859-1")
+                # Read the file content
+                content = read_file_content(file)
+                # Vectorize the content
+                vectorized_content = vectorizer.transform([content])
+                # Make prediction
+                prediction = model.predict(vectorized_content)
+                return render_template('main.html', result=prediction[0])
+            except Exception as e:
+                return render_template('main.html', result=f"Error: {str(e)}")
+    return render_template('main.html', result=None)
 
-            # Transform the content using the vectorizer
-            transformed_content = vectorizer.transform([content])
-            # Predict the category
-            pred = model.predict(transformed_content)[0]
-            prediction = categories[pred]
-
-    return render_template("index.html", prediction=prediction)
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
