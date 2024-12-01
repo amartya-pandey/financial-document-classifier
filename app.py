@@ -6,6 +6,7 @@ import chardet  # To detect file encoding
 from io import BytesIO
 from PyPDF2 import PdfReader  # For PDF files
 from docx import Document  # For DOCX files
+import numpy as np  # For handling predictions
 
 app = Flask(__name__)
 
@@ -56,9 +57,19 @@ def index():
                 content = read_file_content(file)
                 # Vectorize the content
                 vectorized_content = vectorizer.transform([content])
-                # Make prediction
-                prediction = model.predict(vectorized_content)
-                return render_template('main.html', result=prediction[0])
+                
+                # Make predictions
+                predictions = model.predict(vectorized_content)
+                
+                # Get prediction probabilities if your model supports it
+                probabilities = model.predict_proba(vectorized_content)
+                
+                # Get the top 5 predictions based on probabilities
+                top_n = 5
+                top_n_indices = np.argsort(probabilities[0])[::-1][:top_n]
+                top_n_predictions = [(model.classes_[i], probabilities[0][i]) for i in top_n_indices]
+                
+                return render_template('main.html', result=top_n_predictions)
             except Exception as e:
                 return render_template('main.html', result=f"Error: {str(e)}")
     return render_template('main.html', result=None)
