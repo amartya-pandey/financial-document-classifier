@@ -16,6 +16,15 @@ with open('model.dill', 'rb') as model_file:
 with open('vectorizer.dill', 'rb') as vectorizer_file:
     vectorizer = dill.load(vectorizer_file)
 
+# Define the categories
+categories = [
+    "Consolidated statement of cash flows",
+    "Statement of changes in equity",
+    "Note to financial statements",
+    "Statement of operations",
+    "Statements of Financial Position"
+]
+
 def read_file_content(file):
     # Read the raw data from the file
     raw_data = file.read()
@@ -56,9 +65,14 @@ def index():
                 content = read_file_content(file)
                 # Vectorize the content
                 vectorized_content = vectorizer.transform([content])
-                # Make prediction
-                prediction = model.predict(vectorized_content)
-                return render_template('main.html', result=prediction[0])
+                
+                # Make prediction (single category)
+                prediction_index = model.predict(vectorized_content)[0]  # Get the first (and only) prediction
+                
+                # Map the prediction index to the category
+                predicted_category = categories[prediction_index]  # Assuming the model outputs an index
+                
+                return render_template('main.html', result=predicted_category)
             except Exception as e:
                 return render_template('main.html', result=f"Error: {str(e)}")
     return render_template('main.html', result=None)
