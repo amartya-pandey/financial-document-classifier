@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -19,8 +19,23 @@
     </form>
     
     {% if result %}
-        <div id="res"><h2>Prediction:</h2>
-        <p class="show-result"> The file is of type <br>{{ result }}</p> </div> <!-- This will trigger the fade-in effect -->
+        <div id="res">
+            <h2>Prediction:</h2>
+            <p class="show-result">The file is of type <br>{{ result }}</p>
+
+            <!-- Feedback Form -->
+            <h2>Was this correct?</h2>
+            <form method="POST" action="/feedback">
+                <input type="hidden" name="feedback_text" value="{{ uploaded_text }}">
+                <label for="feedback_label">Correct Category:</label>
+                <select name="feedback_label">
+                    {% for category in categories %}
+                        <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Submit Feedback</button>
+            </form>
+        </div>
     {% endif %}
 </body>
 </html>

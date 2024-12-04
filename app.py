@@ -5,7 +5,7 @@ from flask import Flask, request, render_template
 import chardet  # To detect file encoding
 from io import BytesIO
 from PyPDF2 import PdfReader  # For PDF files
-from docx import Document  # For DOCX files
+# from docx import Document  # For DOCX files
 
 app = Flask(__name__)
 
@@ -46,9 +46,9 @@ def read_file_content(file):
             content = ""
             for page in reader.pages:
                 content += page.extract_text() or ""
-        elif file.filename.endswith('.docx'):
-            doc = Document(BytesIO(raw_data))
-            content = "\n".join([para.text for para in doc.paragraphs])
+        # elif file.filename.endswith('.docx'):
+        #     doc = Document(BytesIO(raw_data))
+        #     content = "\n".join([para.text for para in doc.paragraphs])
         else:
             raise ValueError("Unsupported file format or encoding.")
     
@@ -72,10 +72,32 @@ def index():
                 # Map the prediction index to the category
                 predicted_category = categories[prediction_index]  # Assuming the model outputs an index
                 
-                return render_template('index.html', result=predicted_category)
+                return render_template('index.html', result=predicted_category, uploaded_text=content, categories=categories)
             except Exception as e:
-                return render_template('index.html', result=f"Error: {str(e)}")
-    return render_template('index.html', result=None)
+                return render_template('index.html', result=f"Error: {str(e)}", uploaded_text="", categories=categories)
+    return render_template('index.html', result=None, uploaded_text="", categories=categories)
+
+
+@app.route('/feedback', methods=['POST'])
+def feedback():
+    try:
+        # Get feedback data
+        feedback_text = request.form['feedback_text']
+        feedback_label = request.form['feedback_label']
+
+        # Save to feedback.csv
+        feedback_path = 'feedback.csv'
+        feedback_df = pd.DataFrame({'text': [feedback_text], 'label': [feedback_label]})
+        if os.path.exists(feedback_path):
+            feedback_df.to_csv(feedback_path, mode='a', header=False, index=False)
+        else:
+            feedback_df.to_csv(feedback_path, index=False)
+
+        return "Feedback saved successfully!"
+    except Exception as e:
+        return f"Error saving feedback: {str(e)}", 500
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
