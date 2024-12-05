@@ -1,14 +1,19 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Document Classification</title>
     <link rel="stylesheet" href="static/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Arrows:wght@400..700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Arrows:wght@400..700&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Arrows:wght@400..700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Arrows:wght@400..700&family=Quicksand:wght@300..700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <h1>Upload Document for Classification</h1>
 
@@ -17,25 +22,42 @@
         <label for="file"></label>
         <input type="submit" value="Upload">
     </form>
-    
-    {% if result %}
-        <div id="res">
-            <h2>Prediction:</h2>
-            <p class="show-result">The file is of type <br>{{ result }}</p>
 
-            <!-- Feedback Form -->
-            <h2>Was this correct?</h2>
-            <form method="POST" action="/feedback">
-                <input type="hidden" name="feedback_text" value="{{ uploaded_text }}">
-                <label for="feedback_label">Correct Category:</label>
-                <select name="feedback_label">
+    {% if result %}
+    <div id="res">
+        <h2>Prediction:</h2>
+        <p class="show-result">The file is of type <br>{{ result }}</p>
+
+        <!-- Feedback Form -->
+        <form method="POST" action="/feedback" id="feedback-form">
+            <input type="hidden" name="feedback_text" value="{{ uploaded_text }}">
+        
+            <label>Is the prediction correct?</label>
+            <input type="radio" id="yes" name="is_correct" value="yes" onclick="toggleCategory(false)" required>
+            <label for="yes">Yes</label>
+            <input type="radio" id="no" name="is_correct" value="no" onclick="toggleCategory(true)">
+            <label for="no">No</label>
+        
+            <div id="category-selector" style="display: none;">
+                <label for="feedback_label">Select Correct Category:</label>
+                <select name="feedback_label" id="feedback_label">
                     {% for category in categories %}
-                        <option value="{{ category }}">{{ category }}</option>
+                    <option value="{{ category }}">{{ category }}</option>
                     {% endfor %}
                 </select>
-                <button type="submit">Submit Feedback</button>
-            </form>
-        </div>
+            </div>
+        
+            <button type="submit">Submit Feedback</button>
+        </form>
+        
+        <script>
+            function toggleCategory(show) {
+                document.getElementById('category-selector').style.display = show ? 'block' : 'none';
+            }
+        </script>
+        
+
     {% endif %}
 </body>
+
 </html>

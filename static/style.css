@@ -2,10 +2,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-image: url('static/images/dynamic-tech-background.jpg'); /* Path to your techy background image */
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background-color: #f5f7fa; /* Neutral white background for a professional look */
     color: #333;
     font-family: 'Roboto', sans-serif;
     display: flex;
@@ -13,161 +10,114 @@ body {
     align-items: center;
     min-height: 100vh;
     flex-direction: column;
-    background: linear-gradient(120deg, #34d399, #10b981, #e78d04, #059669, #0d9488, #6a3c94, #deff4d); /* Green to teal gradient for a professional tech vibe */
-    background-size: 400% 400%;
-    animation: gradientAnimation 15s ease infinite; /* Smooth, continuous gradient animation */
 }
 
-/* Animation for Gradient Background */
+/* Main Heading (Title) */
+h1 {
+    font-family: "Roboto", sans-serif;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 700;
+    border-bottom: 5px solid transparent;
+    background: linear-gradient(120deg, #34d399, #10b981, #e78d04, #059669);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; /* Gradient text effect for header */
+    animation: gradientAnimation 6s ease infinite; /* Apply animation to text gradient */
+}
+
+/* Animated Gradient */
 @keyframes gradientAnimation {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-/* Main Heading (Title) */
-h1 {
-    font-family: "Edu AU VIC WA NT Arrows", cursive;
-    font-size: 3rem;
-    color: #62d33d;
-    /* text-transform: uppercase; */
-    margin-bottom: 30px;
-    text-align: center;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.541); /* Slight shadow for emphasis */
-}
-
 /* Form Styling */
 form {
-    background: rgba(255, 255, 255, 0.85); /* Semi-transparent white for clean look */
-    padding: 40px;
+    background: #ffffff; /* White background for the form */
+    padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 450px;
     text-align: center;
-    border: 2px solid #dbe1e8;
-    display: flex;
-    flex-direction: column;
+    border: 3px solid transparent; /* Default transparent border */
+    background-image: linear-gradient(white, white), 
+                      linear-gradient(120deg, #34d399, #10b981, #e78d04, #059669); /* Gradient border */
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
     transition: transform 0.3s ease;
+    animation: gradientAnimation 6s ease infinite; /* Apply animation to border gradient */
 }
 
 form:hover {
-    transform: translateY(-5px); /* Slight hover effect to create depth */
+    transform: translateY(-5px); /* Subtle hover effect */
 }
 
 /* Input Field Styling */
 input[type="file"] {
-    font-size: 1.1rem;
-    padding: 12px;
+    font-size: 1rem;
+    padding: 10px;
     margin-bottom: 20px;
     width: 100%;
-    border-radius: 10px;
-    border: 1px solid #e0e5ec;
-    outline: none;
+    border-radius: 8px;
+    border: 1px solid #ddd;
     background-color: #f9f9f9;
+    outline: none;
     transition: border-color 0.3s ease;
 }
 
 input[type="file"]:focus {
-    border-color: #10b981; /* Teal color for focus state */
-}
-
-/* Custom Label for File Input */
-label {
-    font-size: 1.1rem;
-
-    color: #fff;
-    cursor: pointer;
-    padding: 12px;
-    background-color: #4caf50; /* Green for the button */
-    border-radius: 10px;
-    border: none;
-    display: inline-block;
-    text-align: center;
-    margin-bottom: 25px;
-    width: 100%;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-label:hover {
-    background-color: #388e3c; /* Darker green on hover */
-    transform: scale(1.05); /* Slight zoom effect on hover */
+    border-color: #10b981; /* Teal focus state */
 }
 
 /* Submit Button */
 input[type="submit"] {
-    background-color: #0d9488; /* Teal for positive action */
+    background-color: #10b981; /* Teal for positive action */
     color: white;
-    font-size: 1.2rem;
-    padding: 16px;
-    border-radius: 10px;
+    font-size: 1rem;
+    padding: 12px;
+    border-radius: 8px;
     border: none;
     width: 100%;
     cursor: pointer;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 input[type="submit"]:hover {
     background-color: #0a7f7b; /* Darker teal on hover */
-    transform: translateY(-4px); /* Slight hover effect for depth */
+    transform: translateY(-2px); /* Subtle depth effect */
 }
 
 /* Heading for Prediction Result */
 h2 {
-    font-size: 1.8rem;
-    color: #f1faee;
-    margin-top: 30px;
-    margin-bottom: 0px;
-    /* text-transform: uppercase; */
+    font-size: 1.5rem;
+    color: #333;
+    margin-top: 20px;
     font-weight: 600;
-    opacity: 0.9; /* Slightly subtle color */
+    text-align: center;
 }
 
 /* Prediction Result Styling */
 p {
-    font-size: 1.2rem;
-    background: rgba(233, 243, 244, 0.068); /* Soft background for readability */
-    padding: 16px;
-    margin-top: 20px;
-    border-radius: 10px;
-    color: #333;
-    font-weight: 600;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    opacity: 0; /* Start hidden */
-    transform: translateY(10px); /* Start with slight shift */
-    transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth transition */
-}
-
-/* Triggered when result appears */
-.show-result {
-    opacity: 1;
-    transform: translateY(0); /* Reset position */
-}
-
-/* Small Details for Aesthetics */
-small {
     font-size: 1rem;
-    color: #b0bec5;
-    display: block;
-    margin-top: 20px;
-    text-align: center;
+    background: #f9f9f9;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 8px;
+    color: #333;
+    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-#res{
-    
-      font-family: "Quicksand", sans-serif;
-      font-optical-sizing: auto;
-      font-style: normal;
-    }
-#result{
-    .indie-flower-regular {
-        font-family: "Indie Flower", cursive !important;
-        font-weight: 400;
-        font-style: normal;
-      }
-      
+/* Additional Styling for Container */
+#res {
+    font-family: "Roboto", sans-serif;
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
 }
