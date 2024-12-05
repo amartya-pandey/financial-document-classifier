@@ -117,7 +117,7 @@ def feedback():
             feedback_df.to_csv(feedback_path, mode='a', header=False, index=False)
         else:
             feedback_df.to_csv(feedback_path, index=False)
-        return "Feedback saved successfully!"
+        return render_template('feedback_success.html')
     except Exception as e:
         return f"Error saving feedback: {str(e)}", 500
 
