@@ -1,3 +1,7 @@
+Here's an updated version of the README file with a section detailing the **self-bootstrapping** process based on user feedback:
+
+---
+
 # Financial Document Classifier
 
 ## Project Overview
@@ -7,7 +11,7 @@ The **Financial Document Classifier** is a machine learning-based tool designed 
 - **Document Classification**: Classifies financial documents into predefined categories.
 - **Data Preprocessing**: Text cleaning, tokenization, stopword removal, stemming, and n-gram extraction.
 - **Model Training**: Decision Tree Classifier is used to train the model on preprocessed data.
-- **Self-bootstraping**: The model trains iteratively based on user feedback.
+- **Self-Bootstrapping**: The model improves iteratively based on user feedback.
 - **Model Evaluation**: Includes evaluation metrics like accuracy, precision, recall, F1-score, and confusion matrix visualization.
 - **Web Interface**: An easy-to-use Flask web app for uploading and classifying documents.
 
@@ -30,7 +34,6 @@ cd financial-document-classifier
 ```
 
 ### Install Dependencies:
-
 Make sure you have `pip` installed, then install the required dependencies:
 ```bash
 pip install -r requirements.txt
@@ -46,12 +49,11 @@ pip install -r requirements.txt
 ## Usage
 
 ### Training the Model
-
-Open the `model.ipynb` file in notebook.
+Open the `model.ipynb` file in a notebook.
 ```bash
 jupyter notebook
 ```
-Do cell-wise execution of `model.ipynb` to load, preprocess data, train the model, and evaluate its performance.
+Execute cells in `model.ipynb` to load, preprocess data, train the model, and evaluate its performance.
 
 This will:
 - Load data from the specified directory (`data/`).
@@ -65,12 +67,22 @@ To run the Flask-based web application and start classifying documents, use the 
 ```bash
 python app.py
 ```
-
 Then, open your web browser and go to `http://127.0.0.1:5000/`. You will be able to upload documents and classify them into categories.
 
-### Re-training the model based on user feedback
+## Self-Bootstrapping Process
+The classifier incorporates a self-bootstrapping mechanism based on user feedback:
 
+1. **Prediction and Feedback**: After the document is classified, the user can provide feedback on whether the prediction was correct. 
+2. **Feedback Storage**: The feedback is saved in a `feedback.csv` file for further analysis.
+3. **Retraining the Model**: The model automatically retrains itself using the updated data, incorporating new user feedback to improve accuracy.
+4. **Model Persistence**: The updated model and vectorizer are saved and used for subsequent predictions.
 
+### Example Workflow:
+- A user uploads a document and receives a prediction.
+- If the prediction is incorrect, the user can select the correct category.
+- The feedback is stored, and the model retrains, enabling continuous improvement.
+
+---
 
 ## Model Details
 
@@ -91,14 +103,18 @@ The classifier uses the following techniques and models:
   - **Precision, Recall, F1-Score**: For detailed classification performance.
   - **Confusion Matrix**: Visual representation of model performance across classes.
 
-
+---
+## Contributors
+- **[Amartya51](https://github.com/amartya51)**: Lead developer and maintainer.
+- **[Naman Singh](https://github.com/contributorusername)**: Contributions in improving model performance and feedback mechanisms.
+- **[Shreya Pandey](https://github.com/contributorusername)**: Contributions in improving model performance and feedback mechanisms.
+- **[Aditi Rai](https://github.com/contributorusername)**: Contributions in improving model performance and feedback mechanisms.
+---
 
 ## License
-
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
-```
+---
 
 ### Notes:
--There may be some bugs and abnormailities in this code. Please contact if you notice any of these and want to help me.
-```
+There may be some bugs and abnormalities in this code. Please contact if you notice any issues and want to help improve the project.
