@@ -172,6 +172,3 @@ def main():
             print(f"CSV file '{feedback_path}' has been initialised with headers 'text' and 'label'.")
 
 main()
-
-
-

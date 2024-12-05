@@ -82,13 +82,15 @@ def index():
     if request.method == 'POST':
         file = request.files['file']
         if file:
+            filename = file.filename  # Get the filename
+
             try:
                 content = read_file_content(file)
                 vectorized_content = vectorizer.transform([content])
                 prediction_index = model.predict(vectorized_content)[0]
                 predicted_category = categories[prediction_index]
                 store_feedback(content, predicted_category)
-                return render_template('index.html', result=predicted_category, categories=categories, uploaded_text=content)
+                return render_template('index.html', result=predicted_category, categories=categories, uploaded_text=content, filename=filename)
             except Exception as e:
                 return render_template('index.html', result=f"Error: {str(e)}", categories=categories)
     return render_template('index.html', result=None, categories=categories)

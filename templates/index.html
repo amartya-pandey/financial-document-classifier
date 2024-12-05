@@ -26,7 +26,7 @@
     {% if result %}
     <div id="res">
         <h2>Prediction:</h2>
-        <p class="show-result">The file is of type <br>{{ result }}</p>
+        <p class="show-result">The file <strong> {{ filename }} </strong> is of type <br>{{ result }}</p>
 
         <!-- Feedback Form -->
         <form method="POST" action="/feedback" id="feedback-form">
