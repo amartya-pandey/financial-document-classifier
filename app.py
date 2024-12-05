@@ -12,23 +12,11 @@ from pptx import Presentation
 
 app = Flask(__name__)
 
-import warnings
-from sklearn.exceptions import InconsistentVersionWarning
-warnings.filterwarnings("ignore", category=InconsistentVersionWarning)
-
-# Load the model and vectorizer
-with open('model.dill', 'rb') as model_file:
-    model = dill.load(model_file)
-
-with open('vectorizer.dill', 'rb') as vectorizer_file:
-    vectorizer = dill.load(vectorizer_file)
-
-
-
 # Defines the categories
 def get_subdirectories(path):
     return [d for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
 categories = get_subdirectories(r'data')
+
 
 def extract_text_from_pptx(file):
     content = ""
@@ -39,6 +27,26 @@ def extract_text_from_pptx(file):
                 content += shape.text + "\n"
     return content.strip()  
 
+
+
+categories = [
+            'Consolidated statement of cash flows',
+            'Statement of operations',
+            'Statements of Financial Position', 
+            'Statement of changes in equity',
+            'Note to financial statements'  
+            ]
+
+import warnings
+from sklearn.exceptions import InconsistentVersionWarning
+warnings.filterwarnings("ignore", category=InconsistentVersionWarning)
+
+# Load the model and vectorizer
+with open('model.dill', 'rb') as model_file:
+    model = dill.load(model_file)
+
+with open('vectorizer.dill', 'rb') as vectorizer_file:
+    vectorizer = dill.load(vectorizer_file)
 def read_file_content(file):
     raw_data = file.read()
     result = chardet.detect(raw_data)
