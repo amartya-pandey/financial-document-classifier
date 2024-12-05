@@ -13,13 +13,14 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import StratifiedKFold, cross_val_score
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from scipy.sparse import vstack
 from pptx import Presentation
 import PyPDF2
 from wordcloud import WordCloud
 import csv
-# Download stopwords if not done
-nltk.download('stopwords')
 
+# Downloads stopwords if not done so
+nltk.download('stopwords')
 
 class DataLoader:
     """Load text data and labels from a directory and its subdirectories."""
@@ -118,7 +119,7 @@ class Model:
         return self.model.feature_importances_
 
 
-def retrain_model():
+def main():
     directory_path = r'data'
     data_loader = DataLoader(directory_path)
     text_data, labels = data_loader.load_data()
@@ -137,13 +138,22 @@ def retrain_model():
         feedback_labels = feedback_data['label']
 
         # Vectorize feedback
+        
         feedback_X = preprocessor.vectorizer.transform(preprocessor.preprocess_text(feedback_text))
         feedback_y = preprocessor.label_encoder.transform(feedback_labels)
 
-        # Retrain model with feedback
-        X = np.vstack((X, feedback_X.toarray()))
-        y = np.hstack((y, feedback_y))
-        model.train(X, y)
+
+        if feedback_X.shape[0] == feedback_y.shape[0]:
+            X = np.vstack([X, feedback_X])
+            y = np.hstack([y, feedback_y])
+            model.train(X, y)
+        else:
+            print("Feedback data dimensions do not match: Check feedback inputs.")
+
+        # # Retrain model with feedback
+        # X = np.vstack((X, feedback_X))
+        # y = np.hstack((y, feedback_y))
+        # model.train(X, y)
 
         # Save updated model
         with open('model.dill', 'wb') as f:
@@ -154,11 +164,14 @@ def retrain_model():
         open(feedback_path, 'w').close()  # This truncates the file to zero length
         print(f"Feedback data from {feedback_path} has been processed and cleared.")
 
-        with open(feedback_path, mode='w', newline='', encoding='utf-8') as file:
+        with open(feedback_path, mode='w', newline='\n', encoding='utf-8') as file:
             writer = csv.writer(file)
     
             writer.writerow(['text', 'label'])
 
             print(f"CSV file '{feedback_path}' has been initialised with headers 'text' and 'label'.")
 
-retrain_model()
+main()
+
+
+

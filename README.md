@@ -1,19 +1,19 @@
 # Financial Document Classifier
 
 ## Project Overview
-The **Financial Document Classifier** is a machine learning-based tool designed to help finance analysts automatically classify financial documents into categories such as financial reports, market analysis, investment summaries, and more. By leveraging NLP and machine learning techniques, the classifier processes various document types (e.g., PDF, DOCX, PPTX, TXT) to streamline the categorization of financial data, enabling analysts to focus on more strategic tasks.
+The **Financial Document Classifier** is a machine learning-based tool designed to help finance analysts automatically classify financial documents into categories such as financial reports, market analysis, investment summaries, and more. By leveraging NLP and machine learning techniques, the classifier processes various document types (e.g., PDF, PPTX, TXT) to streamline the categorization of financial data, enabling analysts to focus on more strategic tasks.
 
 ### Key Features:
 - **Document Classification**: Classifies financial documents into predefined categories.
 - **Data Preprocessing**: Text cleaning, tokenization, stopword removal, stemming, and n-gram extraction.
 - **Model Training**: Decision Tree Classifier is used to train the model on preprocessed data.
+- **Self-bootstraping**: The model trains iteratively based on user feedback.
 - **Model Evaluation**: Includes evaluation metrics like accuracy, precision, recall, F1-score, and confusion matrix visualization.
 - **Web Interface**: An easy-to-use Flask web app for uploading and classifying documents.
 
 ## Features
 - **Document Types Supported**: 
     - PDFs
-    - Word Documents (DOCX)
     - PowerPoint Presentations (PPTX)
     - Plain Text Files (TXT)
 - **Preprocessing**: Tokenization, stopword removal, stemming, and TF-IDF vectorization.
@@ -39,7 +39,7 @@ pip install -r requirements.txt
 ### Dependencies:
 - `Flask`: Web framework for building the interface.
 - `nltk`, `scikit-learn`: For text preprocessing, machine learning, and evaluation.
-- `PyPDF2`, `python-docx`, `python-pptx`: For reading PDFs, DOCX, and PPTX files.
+- `PyPDF2`, `python-pptx`: For reading PDFs, DOCX, and PPTX files.
 - `dill`: For serializing and deserializing the trained model.
 - `matplotlib`, `seaborn`: For data visualization (confusion matrix, feature importance, etc.).
 
@@ -68,6 +68,10 @@ python app.py
 
 Then, open your web browser and go to `http://127.0.0.1:5000/`. You will be able to upload documents and classify them into categories.
 
+### Re-training the model based on user feedback
+
+
+
 ## Model Details
 
 The classifier uses the following techniques and models:
@@ -86,6 +90,7 @@ The classifier uses the following techniques and models:
   - **Accuracy**: Percentage of correctly predicted documents.
   - **Precision, Recall, F1-Score**: For detailed classification performance.
   - **Confusion Matrix**: Visual representation of model performance across classes.
+
 
 
 ## License
