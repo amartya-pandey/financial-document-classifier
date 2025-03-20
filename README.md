@@ -1,7 +1,3 @@
-Here's an updated version of the README file with a section detailing the **self-bootstrapping** process based on user feedback:
-
----
-
 # Financial Document Classifier
 
 ## Project Overview
