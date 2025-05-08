@@ -102,9 +102,9 @@ The classifier uses the following techniques and models:
 ---
 ## Contributors
 - **[Amartya51](https://github.com/amartya51)**: Lead developer and maintainer.
-- **[Naman Singh](https://github.com/contributorusername)**: Contributions in improving model performance and feedback mechanisms.
-- **[Shreya Pandey](https://github.com/contributorusername)**: Contributions in improving model performance and feedback mechanisms.
-- **[Aditi Rai](https://github.com/contributorusername)**: Contributions in improving model performance and feedback mechanisms.
+- **[Naman Singh](https://github.com/namansinghr)**: Contributions in improving model performance and feedback mechanisms.
+- **[Shreya Pandey](https://github.com/Shreya1393)**: Contributions in improving model performance and feedback mechanisms.
+- **[Aditi Rai](https://github.com/whoaditi)**: Contributions in improving model performance and feedback mechanisms.
 ---
 
 ## License
